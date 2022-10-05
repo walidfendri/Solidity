@@ -1,0 +1,55 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.0;
+
+contract UserRegister{
+    
+    address public owner;
+  
+    mapping (address=>User)Users;
+    
+    constructor() public {
+        owner=msg.sender;
+          
+    }
+    
+     modifier onlyOwner {
+        require(msg.sender==owner);
+        _;
+    }
+
+    struct User{
+        
+        address UserAddress;
+        string  UserName;
+        uint UserId;
+        bool isExist;
+        
+    }
+   
+    function register(address UserAddress,string memory UserName,uint UserId) public onlyOwner {
+           
+         
+           
+            require(Users[UserAddress].isExist==false,"User details already registered and cannot be altered");
+            
+             Users[UserAddress]=User(UserAddress,UserName,UserId,true);
+             
+    }
+    
+            
+    function getUserDetails(address UserAddress) public view returns (address,string memory,uint){
+        
+        
+        return(Users[UserAddress].UserAddress,Users[UserAddress].UserName,Users[UserAddress].UserId);
+        
+    }
+
+  
+    function SearchUserByAddress (address UserAddress) public view returns (string memory){
+        
+        
+        return(Users[UserAddress].UserName);
+}
+
+    
+}
